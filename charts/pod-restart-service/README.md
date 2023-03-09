@@ -1,8 +1,8 @@
 # pod-restart-service
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.26](https://img.shields.io/badge/AppVersion-1.26-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.26](https://img.shields.io/badge/AppVersion-1.26-informational?style=flat-square)
 
-A Helm chart for Kubernetes
+A Helm chart to restart pods in a namespace based on a cron schedule.
 
 ## Values
 
