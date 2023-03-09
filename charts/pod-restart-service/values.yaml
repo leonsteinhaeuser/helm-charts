@@ -1,0 +1,71 @@
+# Default values for pod-restart-service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: bitnami/kubectl
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources:
+  limits:
+    cpu: 50m
+    memory: 64Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# -- Pod restart policy
+restartPolicy: "OnFailure"
+
+# -- Restarts contains a set of deployments, statefulsets and daemonsets to restart
+restarts:
+  # -- Deployments contains a list of deployments to restart.
+  # We expect the name of the deployment to restart.
+  deployments: []
+  # -- Statefulsets contains a list of statefulsets to restart.
+  # We expect the name of the statefulset to restart.
+  statefulsets: []
+  # -- Daemonsets contains a list of daemonsets to restart.
+  # We expect the name of the daemonset to restart.
+  daemonsets: []
+
+# -- Cronjob configuration
+cron:
+  # -- Schedule for the cronjob
+  # Default is every 4 hours
+  # See https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#cron-schedule-syntax
+  schedule: "0 */4 * * *"
+  # -- Suspend the cronjob
+  suspend: false
+  # -- Concurrency policy for the cronjob
+  concurrencyPolicy: "Replace"
+  # -- History limits for the cronjob
+  successfulJobsHistoryLimit: 3
+  # -- History limits for the cronjob
+  failedJobsHistoryLimit: 1

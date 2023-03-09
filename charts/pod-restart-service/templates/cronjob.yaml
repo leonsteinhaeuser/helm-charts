@@ -1,0 +1,70 @@
+{{- if gt (add (len .Values.restarts.deployments) (len .Values.restarts.statefulsets) (len .Values.restarts.daemonsets)) 0 }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "pod-restart-service.fullname" . }}
+  labels:
+    {{- include "pod-restart-service.labels" . | nindent 4 }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: {{ .Values.cron.schedule | quote }}
+  concurrencyPolicy: {{ .Values.cron.concurrencyPolicy | quote }}
+  suspend: {{ .Values.cron.suspend }}
+  successfulJobsHistoryLimit: {{ .Values.cron.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.cron.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          serviceAccountName: {{ include "pod-restart-service.serviceAccountName" . }}
+          restartPolicy: {{ .Values.restartPolicy | quote }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 14 }}
+          containers:
+          {{- if .Values.restarts.deployments }}
+          - name: {{ .Chart.Name }}-deployments
+            securityContext:
+              {{- toYaml .Values.securityContext | nindent 14 }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command:
+            - kubectl
+            args:
+            - rollout restart deployment {{ join " " .Values.restarts.deployments }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+          {{- end }}
+          {{- if .Values.restarts.statefulsets }}
+          - name: {{ .Chart.Name }}-statefulset
+            securityContext:
+              {{- toYaml .Values.securityContext | nindent 14 }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command:
+            - kubectl
+            args:
+            - rollout restart statefulset {{ join " " .Values.restarts.deployments }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+          {{- end }}
+          {{- if .Values.restarts.daemonsets }}
+          - name: {{ .Chart.Name }}-daemonset
+            securityContext:
+              {{- toYaml .Values.securityContext | nindent 14 }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command:
+            - kubectl
+            args:
+            - rollout restart daemonset {{ join " " .Values.restarts.daemonsets }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+          {{- end }}
+{{- end }}
