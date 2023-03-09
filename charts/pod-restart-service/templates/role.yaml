@@ -11,4 +11,4 @@ metadata:
 rules:
   - apiGroups: ["apps"]
     resources: ["deployments", "daemonsets", "statefulsets"]
-    verbs: ["get", "patch"]
+    verbs: ["get", "list", "patch"]
