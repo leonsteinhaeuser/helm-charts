@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   pod-restart-service:
   - apiVersion: v2
+    appVersion: 1.27.3
+    created: "2023-06-24T19:40:37.007213133Z"
+    description: A Helm chart to restart pods in a namespace based on a cron schedule.
+    digest: 18167656592ff9f19f6f9fc5d66b0c17ca61a4b98e07cf9da0baf9c8bae839c4
+    name: pod-restart-service
+    type: application
+    urls:
+    - https://github.com/leonsteinhaeuser/helm-charts/releases/download/pod-restart-service-0.2.0/pod-restart-service-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: "1.26"
     created: "2023-03-09T22:35:51.681490366Z"
     description: A Helm chart to restart pods in a namespace based on a cron schedule.
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://github.com/leonsteinhaeuser/helm-charts/releases/download/pod-restart-service-0.1.0/pod-restart-service-0.1.0.tgz
     version: 0.1.0
-generated: "2023-03-09T22:35:51.681496767Z"
+generated: "2023-06-24T19:40:37.007225534Z"
